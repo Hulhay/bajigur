@@ -13,6 +13,8 @@ import (
 	"hulhay-mall/internal/apis/operations"
 	"hulhay-mall/internal/apis/operations/health"
 	"hulhay-mall/internal/apis/operations/store"
+	"hulhay-mall/internal/handlers"
+	"hulhay-mall/internal/models"
 )
 
 //go:generate swagger generate server --target ../../../hulhay-mall-be --name HulhayMall --spec ../../api/swagger.yml --model-package internal/models --server-package internal/apis --principal interface{}
@@ -39,14 +41,25 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	api.HealthGetHealthHandler = health.GetHealthHandlerFunc(func(params health.GetHealthParams) middleware.Responder {
+		result, err := handlers.NewHandler().GetHealtcheck()
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return health.NewGetHealthDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return health.NewGetHealthOK().WithPayload(&health.GetHealthOKBody{
+			Data: &models.Health{
+				Status: result.Status,
+			},
+			Message: "Success",
+		})
+	})
+
 	if api.StoreDeleteStoresIDHandler == nil {
 		api.StoreDeleteStoresIDHandler = store.DeleteStoresIDHandlerFunc(func(params store.DeleteStoresIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation store.DeleteStoresID has not yet been implemented")
-		})
-	}
-	if api.HealthGetHealthHandler == nil {
-		api.HealthGetHealthHandler = health.GetHealthHandlerFunc(func(params health.GetHealthParams) middleware.Responder {
-			return middleware.NotImplemented("operation health.GetHealth has not yet been implemented")
 		})
 	}
 	if api.StoreGetStoresHandler == nil {

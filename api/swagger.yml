@@ -1,0 +1,310 @@
+swagger: "2.0"
+info:
+  description: "Hulhay Mall API"
+  version: "1.0.0"
+  title: "Hulhay Mall"
+  contact:
+    email: "prasetyosyifa@gmail.com"
+host: localhost:8080
+schemes:
+  - "http"
+tags:
+  - name: "Health"
+    description : "Check the service"
+  - name: "Store"
+    description: "Every request and response about Store"
+
+paths:
+  /health:
+    get:
+      summary: "Health check"
+      description: "Health check endpoint"
+      tags:
+        - "Health"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Success retrieve data"
+                example: "App running well"
+              data:
+                type: object
+                $ref: "#/definitions/Health"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
+          
+  /stores:
+    get:
+      summary: "Get list store data"
+      description: "Get list store data"
+      tags:
+        - "Store"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Success retrieve data"
+                example: "Success"
+              data:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Stores"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
+          
+    post:
+      summary: "Create new store"
+      description: "Create new store and save the data in stores table and store_details table"
+      tags:
+        - "Store"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          description: "Body for create new store request"
+          required: true
+          schema:
+            $ref: "#/definitions/StoresRequest"
+      responses:
+        "201":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Success create new data"
+                example: "Success"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
+
+  /stores/{id}:
+    get:
+      summary: "Get detail store data"
+      description: "Get detail store data"
+      tags:
+        - "Store"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: id
+          type: "string"
+          description: "The id of store"
+          required: true
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Success retrieve data"
+                example: "Success"
+              data:
+                  $ref: "#/definitions/DetailStores"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
+    
+    patch:
+      summary: "Update store data"
+      description: "Update store data by store.id"
+      tags:
+        - "Store"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: id
+          type: "string"
+          description: "The id of store"
+          required: true
+        - in: body
+          name: body
+          description: "Data for update store"
+          required: true
+          schema:
+            $ref: "#/definitions/StoresRequest"
+      responses:
+        "201":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Success update one data"
+                example: "Success"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
+          
+    delete:
+      summary: "Delete store data"
+      description: "Delete store data by store.id"
+      tags:
+        - "Store"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: id
+          type: "string"
+          description: "The id of store"
+          required: true
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Success delete one data"
+                example: "Success"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
+
+definitions:
+  Health:
+    type: "object"
+    properties:
+      status:
+        type: string
+        example: "UP"
+        
+  StoresRequest:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      store_id:
+        type: "integer"
+        example: 1
+      store_name:
+        type: "string"
+        example: "Warung Bersih"
+      owner:
+        type: "string"
+        example: "Syifa Prasetyo"
+      store_phone:
+        type: "string"
+        example: "088220138765"
+      store_photo:
+        type: "string"
+        example: "sp1.jpg"
+      store_address:
+        type: "string"
+        example: "Banjaran, Kab. Bandung"
+        
+  Stores:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      store_name:
+        type: "string"
+        example: "Warung Bersih"
+      store_photo:
+        type: "string"
+        example: "sp1.jpg"
+      created_at:
+        type: "string"
+      updated_at:
+        type: "string"
+  
+  DetailStores:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      store_id:
+        type: "integer"
+        example: 1
+      store_name:
+        type: "string"
+        example: "Warung Bersih"
+      owner:
+        type: "string"
+        example: "Syifa Prasetyo"
+      store_phone:
+        type: "string"
+        example: "088220138765"
+      store_photo:
+        type: "string"
+        example: "sp1.jpg"
+      store_address:
+        type: "string"
+        example: "Banjaran, Kab. Bandung"
+  
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+        example: "500"
+      message:
+        type: string
+        example: "error"
+
+  Metadata:
+    type: "object"
+    properties:
+      page:
+        type: integer
+        example: 1
+      per_page:
+        type: integer
+        example: 50
+      total_row:
+        type: integer
+        example: 200
+      total_page:
+        type: integer
+        example: 4
+
+responses:
+  NotFound:
+    description: The specified resource was not found
+    schema:
+      $ref: "#/definitions/Error"
+  Unauthorized:
+    description: Unauthorized
+    schema:
+      $ref: "#/definitions/Error"
+  BadRequest:
+    description: Bad Request
+    schema:
+      $ref: "#/definitions/Error"
+  ServiceUnvailable:
+    description: Bad Request
+    schema:
+      $ref: "#/definitions/Error"
+  UprocessableEntity:
+    description: UprocessableEntity
+    schema:
+      $ref: "#/definitions/Error"
+  InternalServerError:
+    description: Internal server error
+    schema:
+      $ref: "#/definitions/Error"
+  ErrorUnexpected:
+    description: Unexpected
+    schema:
+      $ref: "#/definitions/Error"

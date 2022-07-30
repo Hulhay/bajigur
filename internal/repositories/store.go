@@ -2,14 +2,13 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"hulhay-mall/internal/models"
 	"hulhay-mall/internal/shared"
 	"time"
 )
 
 func (r *repositories) CreateStore(ctx context.Context, params models.StoresRequest) error {
-	var stores models.Stores
+	var stores *models.Stores
 
 	createdAt := time.Now()
 	updatedAt := createdAt
@@ -19,6 +18,7 @@ func (r *repositories) CreateStore(ctx context.Context, params models.StoresRequ
 	}
 
 	tx := r.qry.Begin()
+	defer tx.Commit()
 
 	if err := tx.Model(&stores).Create(map[string]interface{}{
 		"owner":         params.Owner,
@@ -33,9 +33,18 @@ func (r *repositories) CreateStore(ctx context.Context, params models.StoresRequ
 		return err
 	}
 
-	tx.Commit()
-
-	fmt.Println("repo :", &stores)
-
 	return nil
+}
+
+func (r *repositories) GetStores(ctx context.Context) ([]*models.Stores, error) {
+	var stores []*models.Stores
+
+	tx := r.qry.Begin()
+	defer tx.Commit()
+
+	if err := tx.Model(&stores).Find(&stores).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	return stores, nil
 }

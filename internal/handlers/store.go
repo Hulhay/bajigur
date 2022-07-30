@@ -12,3 +12,11 @@ func (h *handler) CreateStore(ctx context.Context, params *models.StoresRequest)
 	}
 	return nil
 }
+
+func (h *handler) GetStores(ctx context.Context) ([]*models.Stores, error) {
+	res, err := h.useCase.GetStores(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

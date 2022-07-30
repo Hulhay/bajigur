@@ -72,14 +72,25 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 			Message: "Create data successfully",
 		})
 	})
+
+	// GET STORE
+	api.StoreGetStoresHandler = store.GetStoresHandlerFunc(func(params store.GetStoresParams) middleware.Responder {
+		result, err := handlers.NewHandler().GetStores(context.Background())
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return store.NewGetStoresDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return store.NewGetStoresOK().WithPayload(&store.GetStoresOKBody{
+			Message: "Success",
+			Data:    result,
+		})
+	})
+
 	if api.StoreDeleteStoresIDHandler == nil {
 		api.StoreDeleteStoresIDHandler = store.DeleteStoresIDHandlerFunc(func(params store.DeleteStoresIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation store.DeleteStoresID has not yet been implemented")
-		})
-	}
-	if api.StoreGetStoresHandler == nil {
-		api.StoreGetStoresHandler = store.GetStoresHandlerFunc(func(params store.GetStoresParams) middleware.Responder {
-			return middleware.NotImplemented("operation store.GetStores has not yet been implemented")
 		})
 	}
 	if api.StoreGetStoresIDHandler == nil {

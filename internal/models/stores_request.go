@@ -20,13 +20,16 @@ import (
 type StoresRequest struct {
 
 	// owner
+	// Example: owner dummy
 	// Required: true
 	Owner *string `json:"owner" gorm:"type:varchar(255)"`
 
 	// store address
+	// Example: Banjaran, Kabupaten Bandung
 	StoreAddress string `json:"store_address,omitempty" gorm:"type:varchar(255)"`
 
 	// store name
+	// Example: warung dummy
 	// Required: true
 	StoreName *string `json:"store_name" gorm:"type:varchar(255)"`
 

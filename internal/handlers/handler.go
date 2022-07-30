@@ -15,6 +15,7 @@ type Handlers interface {
 	GetHealtcheck() (*models.Health, error)
 
 	CreateStore(ctx context.Context, params *models.StoresRequest) error
+	GetStores(ctx context.Context) ([]*models.Stores, error)
 }
 
 func NewHandler() Handlers {

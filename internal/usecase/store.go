@@ -23,9 +23,18 @@ func (u *useCase) CreateStore(ctx context.Context, params *models.StoresRequest)
 
 func (u *useCase) GetStores(ctx context.Context) ([]*models.Stores, error) {
 
-	res, err := u.repo.GetStores(ctx)
+	var res []*models.Stores
+
+	store, err := u.repo.GetStores(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	for _, data := range store {
+		res = append(res, &models.Stores{
+			StoreName:  data.StoreName,
+			StorePhoto: data.StorePhoto,
+		})
 	}
 
 	return res, nil

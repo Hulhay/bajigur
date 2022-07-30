@@ -117,6 +117,19 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		})
 	})
 
+	// UPDATE STORE BY ID
+	api.StorePatchStoresIDHandler = store.PatchStoresIDHandlerFunc(func(params store.PatchStoresIDParams) middleware.Responder {
+		err := handlers.NewHandler().UpdateStoreByID(context.Background(), params.Body, params.ID)
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return store.NewPatchStoresIDDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return store.NewPatchStoresIDOK().WithPayload(&store.PatchStoresIDOKBody{
+			Message: "Update data successfully",
+		})
+	})
 	if api.StorePatchStoresIDHandler == nil {
 		api.StorePatchStoresIDHandler = store.PatchStoresIDHandlerFunc(func(params store.PatchStoresIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation store.PatchStoresID has not yet been implemented")

@@ -36,3 +36,11 @@ func (h *handler) DeleteStoreByID(ctx context.Context, storeID string) error {
 	}
 	return nil
 }
+
+func (h *handler) UpdateStoreByID(ctx context.Context, params *models.StoresRequest, storeID string) error {
+	err := h.useCase.UpdateStoreByID(ctx, params, storeID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

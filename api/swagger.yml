@@ -140,7 +140,7 @@ paths:
           schema:
             $ref: "#/definitions/StoresRequest"
       responses:
-        "201":
+        "200":
           description: "Success"
           schema:
             type: object

@@ -76,3 +76,26 @@ func (r *repositories) DeleteStoreByID(ctx context.Context, storeID string) erro
 
 	return nil
 }
+
+func (r *repositories) UpdateStoreByID(ctx context.Context, params *models.StoresRequest, storeID string) error {
+	var store *models.Stores
+
+	updatedAt := time.Now()
+
+	tx := r.qry.Begin()
+	defer tx.Commit()
+
+	if err := tx.Model(&store).Where("id = ?", storeID).Updates(map[string]interface{}{
+		"owner":         params.Owner,
+		"store_address": params.StoreAddress,
+		"store_name":    params.StoreName,
+		"store_phone":   params.StorePhone,
+		"store_photo":   params.StorePhoto,
+		"updated_at":    updatedAt,
+	}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return nil
+}

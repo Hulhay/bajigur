@@ -63,3 +63,24 @@ func (u *useCase) DeleteStoreByID(ctx context.Context, storeID string) error {
 	}
 	return nil
 }
+
+func (u *useCase) UpdateStoreByID(ctx context.Context, params *models.StoresRequest, storeID string) error {
+
+	_, err := u.repo.GetStoreByID(ctx, storeID)
+	if err != nil {
+		return err
+	}
+
+	req := &models.StoresRequest{}
+	req.StoreName = params.StoreName
+	req.StorePhoto = params.StorePhoto
+	req.Owner = params.Owner
+	req.StorePhone = params.StorePhone
+	req.StoreAddress = params.StoreAddress
+
+	err = u.repo.UpdateStoreByID(ctx, req, storeID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

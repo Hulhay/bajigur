@@ -55,10 +55,24 @@ func (r *repositories) GetStoreByID(ctx context.Context, storeID string) (*model
 	tx := r.qry.Begin()
 	defer tx.Commit()
 
-	if err := tx.Model(&store).Where("id = ?", storeID).Find(&store).Error; err != nil {
+	if err := tx.Model(&store).Where("id = ?", storeID).First(&store).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 
 	return store, nil
+}
+
+func (r *repositories) DeleteStoreByID(ctx context.Context, storeID string) error {
+	var store *models.Stores
+
+	tx := r.qry.Begin()
+	defer tx.Commit()
+
+	if err := tx.Delete(&store, storeID).Unscoped().Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return nil
 }

@@ -28,3 +28,11 @@ func (h *handler) GetStoreByID(ctx context.Context, storeID string) (*models.Sto
 	}
 	return res, nil
 }
+
+func (h *handler) DeleteStoreByID(ctx context.Context, storeID string) error {
+	err := h.useCase.DeleteStoreByID(ctx, storeID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

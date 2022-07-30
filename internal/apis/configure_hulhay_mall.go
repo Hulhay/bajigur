@@ -103,16 +103,20 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		})
 	})
 
-	if api.StoreDeleteStoresIDHandler == nil {
-		api.StoreDeleteStoresIDHandler = store.DeleteStoresIDHandlerFunc(func(params store.DeleteStoresIDParams) middleware.Responder {
-			return middleware.NotImplemented("operation store.DeleteStoresID has not yet been implemented")
+	// DELETE STORE BY ID
+	api.StoreDeleteStoresIDHandler = store.DeleteStoresIDHandlerFunc(func(params store.DeleteStoresIDParams) middleware.Responder {
+		err := handlers.NewHandler().DeleteStoreByID(context.Background(), params.ID)
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return store.NewDeleteStoresIDDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return store.NewDeleteStoresIDOK().WithPayload(&store.DeleteStoresIDOKBody{
+			Message: "Delete data successfully",
 		})
-	}
-	if api.StoreGetStoresIDHandler == nil {
-		api.StoreGetStoresIDHandler = store.GetStoresIDHandlerFunc(func(params store.GetStoresIDParams) middleware.Responder {
-			return middleware.NotImplemented("operation store.GetStoresID has not yet been implemented")
-		})
-	}
+	})
+
 	if api.StorePatchStoresIDHandler == nil {
 		api.StorePatchStoresIDHandler = store.PatchStoresIDHandlerFunc(func(params store.PatchStoresIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation store.PatchStoresID has not yet been implemented")

@@ -49,3 +49,17 @@ func (u *useCase) GetStoreByID(ctx context.Context, storeID string) (*models.Sto
 
 	return store, nil
 }
+
+func (u *useCase) DeleteStoreByID(ctx context.Context, storeID string) error {
+
+	_, err := u.repo.GetStoreByID(ctx, storeID)
+	if err != nil {
+		return err
+	}
+
+	err = u.repo.DeleteStoreByID(ctx, storeID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

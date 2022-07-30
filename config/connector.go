@@ -53,9 +53,9 @@ func getQuery() *gorm.DB {
 		dbLogger := logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 			logger.Config{
-				SlowThreshold: time.Second,   // Slow SQL threshold
-				LogLevel:      logger.Silent, // Log level; Default Silent
-				Colorful:      true,          // Disable color
+				SlowThreshold: time.Second, // Slow SQL threshold
+				LogLevel:      logger.Info, // Log level; Default Silent
+				Colorful:      true,        // Disable color
 			},
 		)
 

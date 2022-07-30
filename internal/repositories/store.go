@@ -48,3 +48,17 @@ func (r *repositories) GetStores(ctx context.Context) ([]*models.Stores, error) 
 	}
 	return stores, nil
 }
+
+func (r *repositories) GetStoreByID(ctx context.Context, storeID string) (*models.Stores, error) {
+	var store *models.Stores
+
+	tx := r.qry.Begin()
+	defer tx.Commit()
+
+	if err := tx.Model(&store).Where("id = ?", storeID).Find(&store).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	return store, nil
+}

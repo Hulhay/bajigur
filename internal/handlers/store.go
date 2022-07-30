@@ -20,3 +20,11 @@ func (h *handler) GetStores(ctx context.Context) ([]*models.Stores, error) {
 	}
 	return res, nil
 }
+
+func (h *handler) GetStoreByID(ctx context.Context, storeID string) (*models.Stores, error) {
+	res, err := h.useCase.GetStoreByID(ctx, storeID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

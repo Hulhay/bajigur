@@ -39,3 +39,13 @@ func (u *useCase) GetStores(ctx context.Context) ([]*models.Stores, error) {
 
 	return res, nil
 }
+
+func (u *useCase) GetStoreByID(ctx context.Context, storeID string) (*models.Stores, error) {
+
+	store, err := u.repo.GetStoreByID(ctx, storeID)
+	if err != nil {
+		return nil, err
+	}
+
+	return store, nil
+}

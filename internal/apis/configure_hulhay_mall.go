@@ -88,6 +88,21 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		})
 	})
 
+	// GET STORE BY ID
+	api.StoreGetStoresIDHandler = store.GetStoresIDHandlerFunc(func(params store.GetStoresIDParams) middleware.Responder {
+		result, err := handlers.NewHandler().GetStoreByID(context.Background(), params.ID)
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return store.NewGetStoresIDDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return store.NewGetStoresIDOK().WithPayload(&store.GetStoresIDOKBody{
+			Message: "Success",
+			Data:    result,
+		})
+	})
+
 	if api.StoreDeleteStoresIDHandler == nil {
 		api.StoreDeleteStoresIDHandler = store.DeleteStoresIDHandlerFunc(func(params store.DeleteStoresIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation store.DeleteStoresID has not yet been implemented")

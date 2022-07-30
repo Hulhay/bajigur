@@ -116,7 +116,7 @@ paths:
                 description: "Success retrieve data"
                 example: "Success"
               data:
-                  $ref: "#/definitions/DetailStores"
+                  $ref: "#/definitions/Stores"
         default:
           $ref: "#/responses/ErrorUnexpected"
     
@@ -178,80 +178,79 @@ paths:
         default:
           $ref: "#/responses/ErrorUnexpected"
 
-definitions:
+definitions:    
+
+#### REQUEST ####
+
+  StoresRequest:
+    type: "object"
+    required: 
+      - store_name
+      - owner
+      - store_phone
+    properties:
+      store_name:
+        type: "string"
+        example: "warung dummy"
+        x-go-custom-tag: gorm:"type:varchar(255)"
+      owner:
+        type: "string"
+        example: "owner dummy"
+        x-go-custom-tag: gorm:"type:varchar(255)"
+      store_phone:
+        type: "string"
+        example: "+6288220138765"
+        pattern: '\+62\d*'
+        maxLength: 15
+        x-go-custom-tag: gorm:"type:varchar(15)"
+      store_photo:
+        type: "string"
+        example: "sp1.jpg"
+        x-go-custom-tag: gorm:"type:varchar(255);default:sp0.jpg"
+      store_address:
+        type: "string"
+        example: "Banjaran, Kabupaten Bandung"
+        x-go-custom-tag: gorm:"type:varchar(255)"
+
+#### Response ####
+
   Health:
     type: "object"
     properties:
       status:
         type: string
         example: "UP"
-        
-  StoresRequest:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        example: 1
-      store_id:
-        type: "integer"
-        example: 1
-      store_name:
-        type: "string"
-        example: "Warung Bersih"
-      owner:
-        type: "string"
-        example: "Syifa Prasetyo"
-      store_phone:
-        type: "string"
-        example: "088220138765"
-      store_photo:
-        type: "string"
-        example: "sp1.jpg"
-      store_address:
-        type: "string"
-        example: "Banjaran, Kab. Bandung"
-        
+  
   Stores:
     type: "object"
     properties:
       id:
         type: "integer"
-        example: 1
+        format: "int64"
+        x-go-custom-tag: gorm:"type:int primary key auto_increment"
       store_name:
         type: "string"
-        example: "Warung Bersih"
-      store_photo:
-        type: "string"
-        example: "sp1.jpg"
-      created_at:
-        type: "string"
-      updated_at:
-        type: "string"
-  
-  DetailStores:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        example: 1
-      store_id:
-        type: "integer"
-        example: 1
-      store_name:
-        type: "string"
-        example: "Warung Bersih"
+        x-go-custom-tag: gorm:"type:varchar(255)"
       owner:
         type: "string"
-        example: "Syifa Prasetyo"
+        x-go-custom-tag: gorm:"type:varchar(255)"
       store_phone:
         type: "string"
-        example: "088220138765"
+        x-go-custom-tag: gorm:"type:varchar(15)"
       store_photo:
         type: "string"
-        example: "sp1.jpg"
+        x-go-custom-tag: gorm:"type:varchar(255);default:sp0.jpg"
       store_address:
         type: "string"
-        example: "Banjaran, Kab. Bandung"
+        x-go-custom-tag: gorm:"type:varchar(255)"
+      created_at:
+        type: "string"
+        format: "date-time"
+        x-go-custom-tag: gorm:"type:timestamp;autoCreateTime"
+      updated_at:
+        type: "string"
+        format: "date-time"
+        x-go-custom-tag: gorm:"type:timestamp;autoUpdateTime"
   
   Error:
     type: object

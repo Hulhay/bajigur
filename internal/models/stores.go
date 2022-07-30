@@ -8,8 +8,10 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Stores stores
@@ -18,26 +20,71 @@ import (
 type Stores struct {
 
 	// created at
-	CreatedAt string `json:"created_at,omitempty"`
+	// Format: date-time
+	CreatedAt strfmt.DateTime `json:"created_at,omitempty" gorm:"type:timestamp;autoCreateTime"`
 
 	// id
-	// Example: 1
-	ID int64 `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty" gorm:"type:int primary key auto_increment"`
+
+	// owner
+	Owner string `json:"owner,omitempty" gorm:"type:varchar(255)"`
+
+	// store address
+	StoreAddress string `json:"store_address,omitempty" gorm:"type:varchar(255)"`
 
 	// store name
-	// Example: Warung Bersih
-	StoreName string `json:"store_name,omitempty"`
+	StoreName string `json:"store_name,omitempty" gorm:"type:varchar(255)"`
+
+	// store phone
+	StorePhone string `json:"store_phone,omitempty" gorm:"type:varchar(15)"`
 
 	// store photo
-	// Example: sp1.jpg
-	StorePhoto string `json:"store_photo,omitempty"`
+	StorePhoto string `json:"store_photo,omitempty" gorm:"type:varchar(255);default:sp0.jpg"`
 
 	// updated at
-	UpdatedAt string `json:"updated_at,omitempty"`
+	// Format: date-time
+	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty" gorm:"type:timestamp;autoUpdateTime"`
 }
 
 // Validate validates this stores
 func (m *Stores) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Stores) validateCreatedAt(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("created_at", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Stores) validateUpdatedAt(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("updated_at", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"context"
+	"hulhay-mall/internal/models"
 	"hulhay-mall/internal/repositories"
 )
 
@@ -9,6 +11,7 @@ type useCase struct {
 }
 
 type UseCase interface {
+	CreateStore(ctx context.Context, params *models.StoresRequest) error
 }
 
 func NewUseCase(r repositories.Repositories) UseCase {

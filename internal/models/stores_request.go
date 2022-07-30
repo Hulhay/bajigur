@@ -8,8 +8,10 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // StoresRequest stores request
@@ -17,37 +19,83 @@ import (
 // swagger:model StoresRequest
 type StoresRequest struct {
 
-	// id
-	// Example: 1
-	ID int64 `json:"id,omitempty"`
-
 	// owner
-	// Example: Syifa Prasetyo
-	Owner string `json:"owner,omitempty"`
+	// Required: true
+	Owner *string `json:"owner" gorm:"type:varchar(255)"`
 
 	// store address
-	// Example: Banjaran, Kab. Bandung
-	StoreAddress string `json:"store_address,omitempty"`
-
-	// store id
-	// Example: 1
-	StoreID int64 `json:"store_id,omitempty"`
+	StoreAddress string `json:"store_address,omitempty" gorm:"type:varchar(255)"`
 
 	// store name
-	// Example: Warung Bersih
-	StoreName string `json:"store_name,omitempty"`
+	// Required: true
+	StoreName *string `json:"store_name" gorm:"type:varchar(255)"`
 
 	// store phone
-	// Example: 088220138765
-	StorePhone string `json:"store_phone,omitempty"`
+	// Example: +6288220138765
+	// Required: true
+	// Max Length: 15
+	// Pattern: \+62\d*
+	StorePhone *string `json:"store_phone" gorm:"type:varchar(15)"`
 
 	// store photo
 	// Example: sp1.jpg
-	StorePhoto string `json:"store_photo,omitempty"`
+	StorePhoto string `json:"store_photo,omitempty" gorm:"type:varchar(255);default:sp0.jpg"`
 }
 
 // Validate validates this stores request
 func (m *StoresRequest) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateOwner(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStoreName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStorePhone(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *StoresRequest) validateOwner(formats strfmt.Registry) error {
+
+	if err := validate.Required("owner", "body", m.Owner); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *StoresRequest) validateStoreName(formats strfmt.Registry) error {
+
+	if err := validate.Required("store_name", "body", m.StoreName); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *StoresRequest) validateStorePhone(formats strfmt.Registry) error {
+
+	if err := validate.Required("store_phone", "body", m.StorePhone); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("store_phone", "body", *m.StorePhone, 15); err != nil {
+		return err
+	}
+
+	if err := validate.Pattern("store_phone", "body", *m.StorePhone, `\+62\d*`); err != nil {
+		return err
+	}
+
 	return nil
 }
 

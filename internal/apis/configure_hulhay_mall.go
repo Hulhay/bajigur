@@ -3,6 +3,7 @@
 package apis
 
 import (
+	"context"
 	"crypto/tls"
 	"net/http"
 
@@ -41,6 +42,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	// GET HEALTH
 	api.HealthGetHealthHandler = health.GetHealthHandlerFunc(func(params health.GetHealthParams) middleware.Responder {
 		result, err := handlers.NewHandler().GetHealtcheck()
 		if err != nil {
@@ -57,6 +59,19 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		})
 	})
 
+	// POST STORE
+	api.StorePostStoresHandler = store.PostStoresHandlerFunc(func(params store.PostStoresParams) middleware.Responder {
+		err := handlers.NewHandler().CreateStore(context.Background(), params.Body)
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return store.NewPostStoresDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return store.NewPostStoresCreated().WithPayload(&store.PostStoresCreatedBody{
+			Message: "Create data successfully",
+		})
+	})
 	if api.StoreDeleteStoresIDHandler == nil {
 		api.StoreDeleteStoresIDHandler = store.DeleteStoresIDHandlerFunc(func(params store.DeleteStoresIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation store.DeleteStoresID has not yet been implemented")
@@ -75,11 +90,6 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 	if api.StorePatchStoresIDHandler == nil {
 		api.StorePatchStoresIDHandler = store.PatchStoresIDHandlerFunc(func(params store.PatchStoresIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation store.PatchStoresID has not yet been implemented")
-		})
-	}
-	if api.StorePostStoresHandler == nil {
-		api.StorePostStoresHandler = store.PostStoresHandlerFunc(func(params store.PostStoresParams) middleware.Responder {
-			return middleware.NotImplemented("operation store.PostStores has not yet been implemented")
 		})
 	}
 

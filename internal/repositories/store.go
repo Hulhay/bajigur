@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func (r *repositories) CreateStore(ctx context.Context, params models.StoresRequest) error {
+func (r *repositories) CreateStore(ctx context.Context, params *models.StoresRequest) error {
 	var stores *models.Stores
 
 	createdAt := time.Now()

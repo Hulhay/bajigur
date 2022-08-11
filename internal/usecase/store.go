@@ -7,7 +7,7 @@ import (
 
 func (u *useCase) CreateStore(ctx context.Context, params *models.StoresRequest) error {
 
-	err := u.repo.CreateStore(ctx, models.StoresRequest{
+	err := u.repo.CreateStore(ctx, &models.StoresRequest{
 		StoreName:    params.StoreName,
 		StorePhoto:   params.StorePhoto,
 		Owner:        params.Owner,

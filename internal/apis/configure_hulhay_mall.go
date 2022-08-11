@@ -14,6 +14,7 @@ import (
 	"hulhay-mall/internal/apis/operations"
 	"hulhay-mall/internal/apis/operations/health"
 	"hulhay-mall/internal/apis/operations/store"
+	"hulhay-mall/internal/apis/operations/user"
 	"hulhay-mall/internal/handlers"
 	"hulhay-mall/internal/models"
 )
@@ -130,11 +131,34 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 			Message: "Update data successfully",
 		})
 	})
-	if api.StorePatchStoresIDHandler == nil {
-		api.StorePatchStoresIDHandler = store.PatchStoresIDHandlerFunc(func(params store.PatchStoresIDParams) middleware.Responder {
-			return middleware.NotImplemented("operation store.PatchStoresID has not yet been implemented")
+
+	// REGISTER
+	api.UserPostRegisterHandler = user.PostRegisterHandlerFunc(func(params user.PostRegisterParams) middleware.Responder {
+		err := handlers.NewHandler().Register(context.Background(), params.Body)
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return user.NewPostRegisterDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return user.NewPostRegisterCreated().WithPayload(&user.PostRegisterCreatedBody{
+			Message: "Success Register New Account",
 		})
-	}
+	})
+
+	// LOGIN
+	api.UserPostLoginHandler = user.PostLoginHandlerFunc(func(params user.PostLoginParams) middleware.Responder {
+		err := handlers.NewHandler().Login(context.Background(), params.Body)
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return user.NewPostLoginDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return user.NewPostLoginOK().WithPayload(&user.PostLoginOKBody{
+			Message: "Login Succcessfully",
+		})
+	})
 
 	api.PreServerShutdown = func() {}
 

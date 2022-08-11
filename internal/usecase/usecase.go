@@ -16,6 +16,9 @@ type UseCase interface {
 	GetStoreByID(ctx context.Context, storeID string) (*models.Stores, error)
 	DeleteStoreByID(ctx context.Context, storeID string) error
 	UpdateStoreByID(ctx context.Context, params *models.StoresRequest, stringID string) error
+
+	Register(ctx context.Context, params *models.RegisterRequest) error
+	Login(ctx context.Context, params *models.LoginRequest) error
 }
 
 func NewUseCase(r repositories.Repositories) UseCase {

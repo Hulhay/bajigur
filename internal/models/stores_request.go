@@ -22,27 +22,27 @@ type StoresRequest struct {
 	// owner
 	// Example: owner dummy
 	// Required: true
-	Owner *string `json:"owner" gorm:"type:varchar(255)"`
+	Owner *string `json:"owner"`
 
 	// store address
 	// Example: Banjaran, Kabupaten Bandung
-	StoreAddress string `json:"store_address,omitempty" gorm:"type:varchar(255)"`
+	StoreAddress string `json:"store_address,omitempty"`
 
 	// store name
 	// Example: warung dummy
 	// Required: true
-	StoreName *string `json:"store_name" gorm:"type:varchar(255)"`
+	StoreName *string `json:"store_name"`
 
 	// store phone
 	// Example: +6288220138765
 	// Required: true
 	// Max Length: 15
 	// Pattern: \+62\d*
-	StorePhone *string `json:"store_phone" gorm:"type:varchar(15)"`
+	StorePhone *string `json:"store_phone"`
 
 	// store photo
 	// Example: sp1.jpg
-	StorePhoto string `json:"store_photo,omitempty" gorm:"type:varchar(255);default:sp0.jpg"`
+	StorePhoto string `json:"store_photo,omitempty"`
 }
 
 // Validate validates this stores request

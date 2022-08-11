@@ -19,6 +19,9 @@ type Handlers interface {
 	GetStoreByID(ctx context.Context, storeID string) (*models.Stores, error)
 	DeleteStoreByID(ctx context.Context, storeID string) error
 	UpdateStoreByID(ctx context.Context, params *models.StoresRequest, storeID string) error
+
+	Register(ctx context.Context, params *models.RegisterRequest) error
+	Login(ctx context.Context, params *models.LoginRequest) error
 }
 
 func NewHandler() Handlers {

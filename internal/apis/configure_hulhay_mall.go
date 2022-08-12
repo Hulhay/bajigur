@@ -147,15 +147,15 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 	})
 
 	// LOGIN
-	api.UserPostLoginHandler = user.PostLoginHandlerFunc(func(params user.PostLoginParams) middleware.Responder {
+	api.UserPatchLoginHandler = user.PatchLoginHandlerFunc(func(params user.PatchLoginParams) middleware.Responder {
 		err := handlers.NewHandler().Login(context.Background(), params.Body)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
-			return user.NewPostLoginDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+			return user.NewPatchLoginDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
 		}
 
-		return user.NewPostLoginOK().WithPayload(&user.PostLoginOKBody{
+		return user.NewPatchLoginOK().WithPayload(&user.PatchLoginOKBody{
 			Message: "Login Succcessfully",
 		})
 	})

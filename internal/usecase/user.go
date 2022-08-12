@@ -5,14 +5,17 @@ import (
 	"errors"
 	"fmt"
 	"hulhay-mall/internal/models"
+	"hulhay-mall/internal/shared"
 
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func (u *useCase) Register(ctx context.Context, params *models.RegisterRequest) error {
 
-	var err error
+	var (
+		err               error
+		encryptedPassword string
+	)
 
 	// Check the email
 	_, err = u.repo.GetByEmail(ctx, params.Email.String())
@@ -30,18 +33,17 @@ func (u *useCase) Register(ctx context.Context, params *models.RegisterRequest) 
 
 	fullName := fmt.Sprintf("%s %s", *params.FirstName, params.LastName)
 
-	passUUID := fmt.Sprintf("%s%s", *params.Password, uniqueID)
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(passUUID), 14)
-	hashedPasswordStr := string(hashedPassword)
+	encryptedPassword, err = shared.EncryptPassword(*params.Password, uniqueID)
+	if err != nil {
+		return err
+	}
 
 	err = u.repo.Register(ctx, &models.RegisterRequest{
-		Email:     params.Email,
-		FirstName: params.FirstName,
-		LastName:  params.LastName,
-		FullName:  fullName,
-		UniqueID:  uniqueID,
-		Username:  params.Username,
-		Password:  &hashedPasswordStr,
+		Email:    params.Email,
+		FullName: fullName,
+		UniqueID: uniqueID,
+		Username: params.Username,
+		Password: &encryptedPassword,
 	})
 	if err != nil {
 		return err
@@ -51,5 +53,35 @@ func (u *useCase) Register(ctx context.Context, params *models.RegisterRequest) 
 }
 
 func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) error {
+
+	var (
+		err  error
+		user *models.Users
+	)
+
+	user, err = u.repo.GetByUsername(ctx, *params.Username)
+
+	// Check username
+	if err != nil && user == nil {
+		return errors.New("username not found")
+	}
+
+	// Check password
+	passUniqueID := fmt.Sprintf("%s%s", *params.Password, user.UniqueID)
+	err = shared.CheckPassword(*params.Password, passUniqueID)
+	if err != nil {
+		return errors.New("wrong password")
+	}
+
+	// Check isLogin
+	if user.IsLogin == true {
+		return errors.New("you have logged in")
+	}
+
+	err = u.repo.Login(ctx, params)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

@@ -60,3 +60,20 @@ func (r *repositories) GetByUsername(ctx context.Context, username string) (*mod
 
 	return users, nil
 }
+
+func (r *repositories) Login(ctx context.Context, params *models.LoginRequest) error {
+	var users *models.Users
+
+	tx := r.qry.Begin()
+	defer tx.Commit()
+
+	if err := tx.Model(&users).Where("username = ?", params.Username).Updates(map[string]interface{}{
+		"is_login":   1,
+		"updated_at": time.Now(),
+	}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return nil
+}

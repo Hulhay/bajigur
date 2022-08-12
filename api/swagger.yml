@@ -208,7 +208,7 @@ paths:
           $ref: "#/responses/ErrorUnexpected"
           
   /login:
-    post:
+    patch:
       summary: "Login to app"
       description: "Login with an existing account"
       tags:
@@ -381,6 +381,9 @@ definitions:
         type: "string"
         format: "date-time"
         x-go-custom-tag: gorm:"type:timestamp;autoUpdateTime"
+      is_login:
+        type: "boolean"
+        x-go-custom-tag: gorm:"type:tinyint(1);default:0"
   
   Error:
     type: object

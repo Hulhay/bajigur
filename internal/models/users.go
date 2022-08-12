@@ -33,6 +33,9 @@ type Users struct {
 	// id
 	ID int64 `json:"id,omitempty" gorm:"type:int primary key auto_increment"`
 
+	// is login
+	IsLogin bool `json:"is_login,omitempty" gorm:"type:tinyint(1);default:0"`
+
 	// password
 	Password string `json:"password,omitempty" gorm:"type:varchar(255)"`
 

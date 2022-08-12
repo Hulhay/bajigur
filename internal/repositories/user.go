@@ -83,7 +83,7 @@ func (r *repositories) Login(ctx context.Context, params *models.LoginRequest) e
 	defer tx.Commit()
 
 	if err := tx.Model(&users).Where("username = ?", params.Username).Updates(map[string]interface{}{
-		"is_login":   1,
+		"is_login":   true,
 		"updated_at": time.Now(),
 	}).Error; err != nil {
 		tx.Rollback()
@@ -99,8 +99,8 @@ func (r *repositories) Logout(ctx context.Context, params *user.PatchLogoutParam
 	tx := r.qry.Begin()
 	defer tx.Commit()
 
-	if err := tx.Model(&users).Where("username = ?", params.Identifier).Updates(map[string]interface{}{
-		"is_login":   0,
+	if err := tx.Model(&users).Where("unique_id = ?", params.Identifier).Updates(map[string]interface{}{
+		"is_login":   false,
 		"updated_at": time.Now(),
 	}).Error; err != nil {
 		tx.Rollback()

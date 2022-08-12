@@ -148,7 +148,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 	// LOGIN
 	api.UserPatchLoginHandler = user.PatchLoginHandlerFunc(func(params user.PatchLoginParams) middleware.Responder {
-		err := handlers.NewHandler().Login(context.Background(), params.Body)
+		result, err := handlers.NewHandler().Login(context.Background(), params.Body)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
@@ -157,6 +157,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 		return user.NewPatchLoginOK().WithPayload(&user.PatchLoginOKBody{
 			Message: "Login Succcessfully",
+			Data:    result,
 		})
 	})
 

@@ -53,7 +53,7 @@ func (u *useCase) Register(ctx context.Context, params *models.RegisterRequest) 
 	return nil
 }
 
-func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) error {
+func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) (*models.LoginResponse, error) {
 
 	var (
 		err  error
@@ -64,27 +64,32 @@ func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) error 
 
 	// Check username
 	if err != nil && user == nil {
-		return errors.New("username not found")
+		return nil, errors.New("username not found")
 	}
 
 	// Check password
 	passUniqueID := fmt.Sprintf("%s%s", *params.Password, user.UniqueID)
-	err = shared.CheckPassword(user.Password, passUniqueID)
+	err = shared.CheckPassword(passUniqueID, user.Password)
 	if err != nil {
-		return errors.New("wrong password")
+		return nil, errors.New("wrong password")
 	}
 
 	// Check isLogin
 	if user.IsLogin == true {
-		return errors.New("you have logged in")
+		return nil, errors.New("you have logged in")
 	}
 
 	err = u.repo.Login(ctx, params)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	res := &models.LoginResponse{}
+	res.FullName = user.FullName
+	res.Username = user.Username
+	res.Identifier = user.UniqueID
+
+	return res, nil
 }
 
 func (u *useCase) Logout(ctx context.Context, params *user.PatchLogoutParams) error {

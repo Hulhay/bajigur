@@ -232,6 +232,8 @@ paths:
                 type: "string"
                 description: "Login successfully"
                 example: "Login successfully"
+              data:
+                $ref: "#/definitions/LoginResponse"
         default:
           $ref: "#/responses/ErrorUnexpected"
   
@@ -341,6 +343,16 @@ definitions:
       status:
         type: string
         example: "UP"
+
+  LoginResponse:
+    type: "object"
+    properties:
+      username: 
+        type: "string"
+      full_name:
+        type: "string"
+      identifier:
+        type: "string"
   
   Stores:
     type: "object"

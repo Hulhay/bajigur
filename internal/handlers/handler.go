@@ -22,7 +22,7 @@ type Handlers interface {
 	UpdateStoreByID(ctx context.Context, params *models.StoresRequest, storeID string) error
 
 	Register(ctx context.Context, params *models.RegisterRequest) error
-	Login(ctx context.Context, params *models.LoginRequest) error
+	Login(ctx context.Context, params *models.LoginRequest) (*models.LoginResponse, error)
 	Logout(ctx context.Context, params *user.PatchLogoutParams) error
 }
 

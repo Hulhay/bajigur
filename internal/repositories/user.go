@@ -62,6 +62,20 @@ func (r *repositories) GetByUsername(ctx context.Context, username string) (*mod
 	return users, nil
 }
 
+func (r *repositories) GetByIdentifier(ctx context.Context, identifier string) (*models.Users, error) {
+	var users *models.Users
+
+	tx := r.qry.Begin()
+	defer tx.Commit()
+
+	if err := tx.Model(&users).Where("unique_id = ?", identifier).First(&users).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	return users, nil
+}
+
 func (r *repositories) Login(ctx context.Context, params *models.LoginRequest) error {
 	var users *models.Users
 
@@ -85,7 +99,7 @@ func (r *repositories) Logout(ctx context.Context, params *user.PatchLogoutParam
 	tx := r.qry.Begin()
 	defer tx.Commit()
 
-	if err := tx.Model(&users).Where("username = ?", params.Username).Updates(map[string]interface{}{
+	if err := tx.Model(&users).Where("username = ?", params.Identifier).Updates(map[string]interface{}{
 		"is_login":   0,
 		"updated_at": time.Now(),
 	}).Error; err != nil {

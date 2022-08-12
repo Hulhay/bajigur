@@ -18,7 +18,7 @@ func EncryptPassword(password, uniqueID string) (string, error) {
 
 func CheckPassword(password, passwordDB string) error {
 
-	err := bcrypt.CompareHashAndPassword([]byte(password), []byte(passwordDB))
+	err := bcrypt.CompareHashAndPassword([]byte(passwordDB), []byte(password))
 	if err != nil {
 		return err
 	}

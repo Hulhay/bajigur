@@ -37,7 +37,7 @@ type Users struct {
 	IsLogin bool `json:"is_login,omitempty" gorm:"type:tinyint(1);default:0"`
 
 	// password
-	Password string `json:"password,omitempty" gorm:"type:varchar(255)"`
+	Password string `json:"password,omitempty" gorm:"type:varchar"`
 
 	// unique id
 	UniqueID string `json:"unique_id,omitempty" gorm:"type:varchar(255)"`

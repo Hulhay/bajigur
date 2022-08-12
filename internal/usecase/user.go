@@ -69,7 +69,7 @@ func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) error 
 
 	// Check password
 	passUniqueID := fmt.Sprintf("%s%s", *params.Password, user.UniqueID)
-	err = shared.CheckPassword(*params.Password, passUniqueID)
+	err = shared.CheckPassword(user.Password, passUniqueID)
 	if err != nil {
 		return errors.New("wrong password")
 	}
@@ -94,7 +94,7 @@ func (u *useCase) Logout(ctx context.Context, params *user.PatchLogoutParams) er
 		user *models.Users
 	)
 
-	user, err = u.repo.GetByUsername(ctx, params.Username)
+	user, err = u.repo.GetByIdentifier(ctx, params.Identifier)
 
 	// Check username
 	if err != nil && user == nil {

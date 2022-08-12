@@ -22,6 +22,7 @@ type Repositories interface {
 	Register(ctx context.Context, params *models.RegisterRequest) error
 	GetByEmail(ctx context.Context, email string) (*models.Users, error)
 	GetByUsername(ctx context.Context, username string) (*models.Users, error)
+	GetByIdentifier(ctx context.Context, identifier string) (*models.Users, error)
 	Login(ctx context.Context, params *models.LoginRequest) error
 	Logout(ctx context.Context, params *user.PatchLogoutParams) error
 }

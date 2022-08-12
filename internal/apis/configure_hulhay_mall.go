@@ -160,6 +160,20 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		})
 	})
 
+	// LOGOUT
+	api.UserPatchLogoutHandler = user.PatchLogoutHandlerFunc(func(params user.PatchLogoutParams) middleware.Responder {
+		err := handlers.NewHandler().Logout(context.Background(), &params)
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return user.NewPatchLogoutDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return user.NewPatchLogoutOK().WithPayload(&user.PatchLogoutOKBody{
+			Message: "Logout Successfully",
+		})
+	})
+
 	api.PreServerShutdown = func() {}
 
 	api.ServerShutdown = func() {}

@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"hulhay-mall/internal/apis/operations/user"
 	"hulhay-mall/internal/models"
 	"hulhay-mall/internal/shared"
 	"time"
@@ -69,6 +70,23 @@ func (r *repositories) Login(ctx context.Context, params *models.LoginRequest) e
 
 	if err := tx.Model(&users).Where("username = ?", params.Username).Updates(map[string]interface{}{
 		"is_login":   1,
+		"updated_at": time.Now(),
+	}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return nil
+}
+
+func (r *repositories) Logout(ctx context.Context, params *user.PatchLogoutParams) error {
+	var users *models.Users
+
+	tx := r.qry.Begin()
+	defer tx.Commit()
+
+	if err := tx.Model(&users).Where("username = ?", params.Username).Updates(map[string]interface{}{
+		"is_login":   0,
 		"updated_at": time.Now(),
 	}).Error; err != nil {
 		tx.Rollback()

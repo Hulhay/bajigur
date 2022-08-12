@@ -234,6 +234,33 @@ paths:
                 example: "Login successfully"
         default:
           $ref: "#/responses/ErrorUnexpected"
+  
+  /logout:
+    patch:
+      summary: "Logout from app"
+      description: "Logout from app"
+      tags:
+        - "User"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: username
+          type: "string"
+          description: "username's account"
+          required: true
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Logout successfully"
+                example: "Logout successfully"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
 
 definitions:    
 

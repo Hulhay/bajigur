@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"hulhay-mall/internal/apis/operations/user"
 	"hulhay-mall/internal/models"
 	"hulhay-mall/internal/shared"
 
@@ -79,6 +80,33 @@ func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) error 
 	}
 
 	err = u.repo.Login(ctx, params)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *useCase) Logout(ctx context.Context, params *user.PatchLogoutParams) error {
+
+	var (
+		err  error
+		user *models.Users
+	)
+
+	user, err = u.repo.GetByUsername(ctx, params.Username)
+
+	// Check username
+	if err != nil && user == nil {
+		return errors.New("username not found")
+	}
+
+	// Check is_login
+	if user.IsLogin != true {
+		return errors.New("you must login before logout")
+	}
+
+	err = u.repo.Logout(ctx, params)
 	if err != nil {
 		return err
 	}

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"hulhay-mall/internal/apis/operations/user"
 	"hulhay-mall/internal/models"
 	"hulhay-mall/internal/repositories"
 )
@@ -19,6 +20,7 @@ type UseCase interface {
 
 	Register(ctx context.Context, params *models.RegisterRequest) error
 	Login(ctx context.Context, params *models.LoginRequest) error
+	Logout(ctx context.Context, params *user.PatchLogoutParams) error
 }
 
 func NewUseCase(r repositories.Repositories) UseCase {

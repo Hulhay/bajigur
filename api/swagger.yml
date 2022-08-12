@@ -245,9 +245,9 @@ paths:
         - "application/json"
       parameters:
         - in: header
-          name: username
+          name: "identifier"
           type: "string"
-          description: "username's account"
+          description: "unique id for every account"
           required: true
       responses:
         "200":
@@ -399,7 +399,7 @@ definitions:
         x-go-custom-tag: gorm:"type:varchar(255)"
       password:
         type: "string"
-        x-go-custom-tag: gorm:"type:varchar(255)"
+        x-go-custom-tag: gorm:"type:varchar"
       created_at:
         type: "string"
         format: "date-time"

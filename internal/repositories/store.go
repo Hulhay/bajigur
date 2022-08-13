@@ -69,7 +69,10 @@ func (r *repositories) DeleteStoreByID(ctx context.Context, storeID string) erro
 	tx := r.qry.Begin()
 	defer tx.Commit()
 
-	if err := tx.Delete(&store, storeID).Unscoped().Error; err != nil {
+	if err := tx.Model(&store).Where("id = ?", storeID).Updates(map[string]interface{}{
+		"is_deleted": true,
+		"updated_at": time.Now(),
+	}).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

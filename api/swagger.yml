@@ -407,6 +407,9 @@ definitions:
         type: "string"
         format: "date-time"
         x-go-custom-tag: gorm:"type:timestamp;autoUpdateTime"
+      is_deleted:
+        type: "boolean"
+        x-go-custom-tag: gorm:"type:tinyint(1);default:0"
         
   Users:
     type: "object"

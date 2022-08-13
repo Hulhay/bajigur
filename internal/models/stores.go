@@ -26,6 +26,9 @@ type Stores struct {
 	// id
 	ID int64 `json:"id,omitempty" gorm:"type:int primary key auto_increment"`
 
+	// is deleted
+	IsDeleted bool `json:"is_deleted,omitempty" gorm:"type:tinyint(1);default:0"`
+
 	// owner
 	Owner string `json:"owner,omitempty" gorm:"type:varchar(255)"`
 

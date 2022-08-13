@@ -25,6 +25,7 @@ type Repositories interface {
 	GetByIdentifier(ctx context.Context, identifier string) (*models.Users, error)
 	Login(ctx context.Context, params *models.LoginRequest) error
 	Logout(ctx context.Context, params *user.PatchLogoutParams) error
+	GetProfile(ctx context.Context, params *user.GetProfileParams) (*models.Users, error)
 }
 
 func NewRepositories(q *gorm.DB) Repositories {

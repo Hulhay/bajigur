@@ -175,6 +175,21 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		})
 	})
 
+	// GET PROFILE BY IDENTIFIER
+	api.UserGetProfileHandler = user.GetProfileHandlerFunc(func(params user.GetProfileParams) middleware.Responder {
+		result, err := handlers.NewHandler().GetProfile(context.Background(), &params)
+		if err != nil {
+			var errorMessage = new(string)
+			*errorMessage = err.Error()
+			return user.NewGetProfileDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+		}
+
+		return user.NewGetProfileOK().WithPayload(&user.GetProfileOKBody{
+			Message: "Success get profile",
+			Data:    result,
+		})
+	})
+
 	api.PreServerShutdown = func() {}
 
 	api.ServerShutdown = func() {}

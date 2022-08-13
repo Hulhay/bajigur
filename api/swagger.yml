@@ -284,6 +284,33 @@ paths:
                 example: "Logout successfully"
         default:
           $ref: "#/responses/ErrorUnexpected"
+          
+  /profile:
+    get:
+      summary: "show spesific account profile"
+      description: "show spesific account profile with identifier"
+      tags:
+        - "User"
+      parameters:
+        - in : header
+          name: "identifier"
+          type: "string"
+          description: "unique id for every account"
+          required: true
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Success show profile"
+                example: "Success show profile"
+              data: 
+                $ref: "#/definitions/Users"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
 
 definitions:    
 

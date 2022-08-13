@@ -110,3 +110,17 @@ func (r *repositories) Logout(ctx context.Context, params *user.PatchLogoutParam
 
 	return nil
 }
+
+func (r *repositories) GetProfile(ctx context.Context, params *user.GetProfileParams) (*models.Users, error) {
+	var users *models.Users
+
+	tx := r.qry.Begin()
+	defer tx.Commit()
+
+	if err := tx.Model(&users).Where("unique_id = ?", params.Identifier).First(&users).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	return users, nil
+}

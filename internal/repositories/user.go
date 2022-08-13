@@ -23,6 +23,7 @@ func (r *repositories) Register(ctx context.Context, params *models.RegisterRequ
 		"password":   params.Password,
 		"full_name":  params.FullName,
 		"email":      params.Email,
+		"role":       params.Role,
 		"user_photo": shared.DEFAULT_USER_PHOTO,
 		"created_at": createdAt,
 		"updated_at": updatedAt,

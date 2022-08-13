@@ -18,6 +18,16 @@ func (u *useCase) Register(ctx context.Context, params *models.RegisterRequest) 
 		encryptedPassword string
 	)
 
+	if params.Role == `` {
+		params.Role = shared.CUSTOMER
+	}
+
+	if params.Role != `` {
+		if !shared.IsAllowedAccountRole[params.Role] {
+			return errors.New("invalid role")
+		}
+	}
+
 	// Check the email
 	_, err = u.repo.GetByEmail(ctx, params.Email.String())
 	if err == nil {
@@ -31,20 +41,22 @@ func (u *useCase) Register(ctx context.Context, params *models.RegisterRequest) 
 	}
 
 	uniqueID := uuid.New().String()
+	uniqueIDRole := fmt.Sprintf("%sas%s", uniqueID, params.Role)
 
-	fullName := fmt.Sprintf("%s %s", *params.FirstName, params.LastName)
-
-	encryptedPassword, err = shared.EncryptPassword(*params.Password, uniqueID)
+	encryptedPassword, err = shared.EncryptPassword(*params.Password, uniqueIDRole)
 	if err != nil {
 		return err
 	}
 
+	fullName := fmt.Sprintf("%s %s", *params.FirstName, params.LastName)
+
 	err = u.repo.Register(ctx, &models.RegisterRequest{
 		Email:    params.Email,
 		FullName: fullName,
-		UniqueID: uniqueID,
+		UniqueID: uniqueIDRole,
 		Username: params.Username,
 		Password: &encryptedPassword,
+		Role:     params.Role,
 	})
 	if err != nil {
 		return err
@@ -70,6 +82,7 @@ func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	// Check password
 	passUniqueID := fmt.Sprintf("%s%s", *params.Password, user.UniqueID)
 	err = shared.CheckPassword(passUniqueID, user.Password)
+	fmt.Println("[DEBUG] ---- err :", err)
 	if err != nil {
 		return nil, errors.New("wrong password")
 	}

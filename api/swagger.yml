@@ -48,6 +48,11 @@ paths:
         - "Store"
       produces:
         - "application/json"
+      parameters:
+        - in: header
+          name: "identifier"
+          type: "string"
+          required: true
       responses:
         "200":
           description: "Success"
@@ -73,6 +78,10 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - in: header
+          name: "identifier"
+          type: "string"
+          required: true
         - in: body
           name: body
           description: "Body for create new store request"
@@ -101,6 +110,10 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - in: header
+          name: "identifier"
+          type: "string"
+          required: true
         - in: path
           name: id
           type: "string"
@@ -129,6 +142,10 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - in: header
+          name: "identifier"
+          type: "string"
+          required: true
         - in: path
           name: id
           type: "string"
@@ -161,6 +178,10 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - in: header
+          name: "identifier"
+          type: "string"
+          required: true
         - in: path
           name: id
           type: "string"
@@ -322,6 +343,8 @@ definitions:
       password:
         type: "string"
         minLength: 6
+      role:
+        type: "string"
         
   LoginRequest:
     type: "object"
@@ -412,6 +435,9 @@ definitions:
       password:
         type: "string"
         x-go-custom-tag: gorm:"type:varchar"
+      role:
+        type: "string"
+        x-go-custom-tag: gorm:"type:varchar(255)"
       created_at:
         type: "string"
         format: "date-time"

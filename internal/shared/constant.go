@@ -5,3 +5,11 @@ const (
 
 	DEFAULT_USER_PHOTO = "up0.jpg"
 )
+
+const (
+	SUPER_USER = "super_user"
+
+	CUSTOMER = "customer"
+
+	SELLER = "seller"
+)

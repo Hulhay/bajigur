@@ -1,6 +1,7 @@
 package shared
 
 import (
+	"errors"
 	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
@@ -23,4 +24,14 @@ func CheckPassword(password, passwordDB string) error {
 		return err
 	}
 	return nil
+}
+
+func GetRole(identifier string) (string, error) {
+
+	if len(identifier) < 38 {
+		return "", errors.New("invalid identifier")
+	}
+
+	role := string(identifier[38:])
+	return role, nil
 }

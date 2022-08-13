@@ -42,6 +42,9 @@ type RegisterRequest struct {
 	// Min Length: 6
 	Password *string `json:"password"`
 
+	// role
+	Role string `json:"role,omitempty"`
+
 	// unique id
 	UniqueID string `json:"unique_id,omitempty"`
 

@@ -62,7 +62,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 	// POST STORE
 	api.StorePostStoresHandler = store.PostStoresHandlerFunc(func(params store.PostStoresParams) middleware.Responder {
-		err := handlers.NewHandler().CreateStore(context.Background(), params.Body)
+		err := handlers.NewHandler().CreateStore(context.Background(), params.Identifier, params.Body)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
@@ -76,7 +76,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 	// GET STORE
 	api.StoreGetStoresHandler = store.GetStoresHandlerFunc(func(params store.GetStoresParams) middleware.Responder {
-		result, err := handlers.NewHandler().GetStores(context.Background())
+		result, err := handlers.NewHandler().GetStores(context.Background(), params.Identifier)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
@@ -91,7 +91,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 	// GET STORE BY ID
 	api.StoreGetStoresIDHandler = store.GetStoresIDHandlerFunc(func(params store.GetStoresIDParams) middleware.Responder {
-		result, err := handlers.NewHandler().GetStoreByID(context.Background(), params.ID)
+		result, err := handlers.NewHandler().GetStoreByID(context.Background(), params.Identifier, params.ID)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
@@ -106,7 +106,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 	// DELETE STORE BY ID
 	api.StoreDeleteStoresIDHandler = store.DeleteStoresIDHandlerFunc(func(params store.DeleteStoresIDParams) middleware.Responder {
-		err := handlers.NewHandler().DeleteStoreByID(context.Background(), params.ID)
+		err := handlers.NewHandler().DeleteStoreByID(context.Background(), params.Identifier, params.ID)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
@@ -120,7 +120,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 
 	// UPDATE STORE BY ID
 	api.StorePatchStoresIDHandler = store.PatchStoresIDHandlerFunc(func(params store.PatchStoresIDParams) middleware.Responder {
-		err := handlers.NewHandler().UpdateStoreByID(context.Background(), params.Body, params.ID)
+		err := handlers.NewHandler().UpdateStoreByID(context.Background(), params.Identifier, params.Body, params.ID)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()

@@ -39,6 +39,9 @@ type Users struct {
 	// password
 	Password string `json:"password,omitempty" gorm:"type:varchar"`
 
+	// role
+	Role string `json:"role,omitempty" gorm:"type:varchar(255)"`
+
 	// unique id
 	UniqueID string `json:"unique_id,omitempty" gorm:"type:varchar(255)"`
 

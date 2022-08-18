@@ -94,7 +94,7 @@ func (r *repositories) Login(ctx context.Context, params *models.LoginRequest) e
 	return nil
 }
 
-func (r *repositories) Logout(ctx context.Context, params *user.PatchLogoutParams) error {
+func (r *repositories) Logout(ctx context.Context, params *user.PostLogoutParams) error {
 	var users *models.Users
 
 	tx := r.qry.Begin()

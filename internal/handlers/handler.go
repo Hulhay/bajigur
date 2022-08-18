@@ -23,7 +23,7 @@ type Handlers interface {
 
 	Register(ctx context.Context, params *models.RegisterRequest) error
 	Login(ctx context.Context, params *models.LoginRequest) (*models.LoginResponse, error)
-	Logout(ctx context.Context, params *user.PatchLogoutParams) error
+	Logout(ctx context.Context, params *user.PostLogoutParams) error
 	GetProfile(ctx context.Context, params *user.GetProfileParams) (*models.Users, error)
 }
 

@@ -105,7 +105,7 @@ func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	return res, nil
 }
 
-func (u *useCase) Logout(ctx context.Context, params *user.PatchLogoutParams) error {
+func (u *useCase) Logout(ctx context.Context, params *user.PostLogoutParams) error {
 
 	var (
 		err  error

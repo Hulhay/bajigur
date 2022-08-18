@@ -24,7 +24,7 @@ func (h *handler) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	return res, nil
 }
 
-func (h *handler) Logout(ctx context.Context, params *user.PatchLogoutParams) error {
+func (h *handler) Logout(ctx context.Context, params *user.PostLogoutParams) error {
 	err := h.useCase.Logout(ctx, params)
 	if err != nil {
 		return err

@@ -147,30 +147,30 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 	})
 
 	// LOGIN
-	api.UserPatchLoginHandler = user.PatchLoginHandlerFunc(func(params user.PatchLoginParams) middleware.Responder {
+	api.UserPostLoginHandler = user.PostLoginHandlerFunc(func(params user.PostLoginParams) middleware.Responder {
 		result, err := handlers.NewHandler().Login(context.Background(), params.Body)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
-			return user.NewPatchLoginDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+			return user.NewPostLoginDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
 		}
 
-		return user.NewPatchLoginOK().WithPayload(&user.PatchLoginOKBody{
+		return user.NewPostLoginOK().WithPayload(&user.PostLoginOKBody{
 			Message: "Login Succcessfully",
 			Data:    result,
 		})
 	})
 
 	// LOGOUT
-	api.UserPatchLogoutHandler = user.PatchLogoutHandlerFunc(func(params user.PatchLogoutParams) middleware.Responder {
+	api.UserPostLogoutHandler = user.PostLogoutHandlerFunc(func(params user.PostLogoutParams) middleware.Responder {
 		err := handlers.NewHandler().Logout(context.Background(), &params)
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
-			return user.NewPatchLogoutDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+			return user.NewPostLogoutDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
 		}
 
-		return user.NewPatchLogoutOK().WithPayload(&user.PatchLogoutOKBody{
+		return user.NewPostLogoutOK().WithPayload(&user.PostLogoutOKBody{
 			Message: "Logout Successfully",
 		})
 	})

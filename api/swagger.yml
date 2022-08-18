@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  description: "Hulhay Mall API"
+  description: "API for Hulhay Mall"
   version: "1.0.0"
-  title: "Hulhay Mall"
+  title: "Bilatung"
   contact:
     email: "prasetyosyifa@gmail.com"
 host: localhost:8080
@@ -229,7 +229,7 @@ paths:
           $ref: "#/responses/ErrorUnexpected"
           
   /login:
-    patch:
+    post:
       summary: "Login to app"
       description: "Login with an existing account"
       tags:
@@ -259,7 +259,7 @@ paths:
           $ref: "#/responses/ErrorUnexpected"
   
   /logout:
-    patch:
+    post:
       summary: "Logout from app"
       description: "Logout from app"
       tags:

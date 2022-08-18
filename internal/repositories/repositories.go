@@ -24,7 +24,7 @@ type Repositories interface {
 	GetByUsername(ctx context.Context, username string) (*models.Users, error)
 	GetByIdentifier(ctx context.Context, identifier string) (*models.Users, error)
 	Login(ctx context.Context, params *models.LoginRequest) error
-	Logout(ctx context.Context, params *user.PatchLogoutParams) error
+	Logout(ctx context.Context, params *user.PostLogoutParams) error
 	GetProfile(ctx context.Context, params *user.GetProfileParams) (*models.Users, error)
 }
 

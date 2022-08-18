@@ -15,6 +15,8 @@ tags:
     description: "Every request and response about Store"
   - name: "User"
     description: "Every request and response about User"
+  - name: "Auth"
+    description: "Every request and response about Auth"
 
 paths:
   /health:
@@ -205,7 +207,7 @@ paths:
       summary: "Create new account"
       description: "Register new account for this app"
       tags:
-        - "User"
+        - "Auth"
       produces:
         - "application/json"
       parameters:
@@ -233,7 +235,7 @@ paths:
       summary: "Login to app"
       description: "Login with an existing account"
       tags:
-        - "User"
+        - "Auth"
       produces:
         - "application/json"
       parameters:
@@ -263,7 +265,7 @@ paths:
       summary: "Logout from app"
       description: "Logout from app"
       tags:
-        - "User"
+        - "Auth"
       produces:
         - "application/json"
       parameters:
@@ -309,6 +311,36 @@ paths:
                 example: "Success show profile"
               data: 
                 $ref: "#/definitions/Users"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
+  
+    patch:
+      summary: "edit user profile"
+      description: "edit user profile with identifier"
+      tags:
+        - "User"
+      parameters:
+        - in: header
+          name: "identifier"
+          type: "string"
+          description: "unique id for every account"
+          required: true
+        - in: body
+          name: body
+          description: "Body for edit profile with an existing account"
+          required: true
+          schema:
+            $ref: "#/definitions/Users"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              message:
+                type: "string"
+                description: "Success edit user profile"
+                example: "Success edit user profile"
         default:
           $ref: "#/responses/ErrorUnexpected"
 

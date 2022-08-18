@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"context"
-	"hulhay-mall/internal/apis/operations/user"
+	"hulhay-mall/internal/apis/operations/auth"
 	"hulhay-mall/internal/models"
 )
 
@@ -22,7 +22,7 @@ func (h *handler) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	return res, nil
 }
 
-func (h *handler) Logout(ctx context.Context, params *user.PostLogoutParams) error {
+func (h *handler) Logout(ctx context.Context, params *auth.PostLogoutParams) error {
 	err := h.useCase.Logout(ctx, params)
 	if err != nil {
 		return err

@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"context"
-	"hulhay-mall/internal/apis/operations/user"
+	"hulhay-mall/internal/apis/operations/auth"
 	"hulhay-mall/internal/models"
 	"hulhay-mall/internal/shared"
 	"time"
@@ -52,7 +52,7 @@ func (r *repositories) Login(ctx context.Context, params *models.LoginRequest) e
 	return nil
 }
 
-func (r *repositories) Logout(ctx context.Context, params *user.PostLogoutParams) error {
+func (r *repositories) Logout(ctx context.Context, params *auth.PostLogoutParams) error {
 	var users *models.Users
 
 	tx := r.qry.Begin()

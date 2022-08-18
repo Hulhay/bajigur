@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 
 	"hulhay-mall/internal/apis/operations"
+	"hulhay-mall/internal/apis/operations/auth"
 	"hulhay-mall/internal/apis/operations/health"
 	"hulhay-mall/internal/apis/operations/store"
 	"hulhay-mall/internal/apis/operations/user"
@@ -133,7 +134,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 	})
 
 	// REGISTER
-	api.UserPostRegisterHandler = user.PostRegisterHandlerFunc(func(params user.PostRegisterParams) middleware.Responder {
+	api.AuthPostRegisterHandler = auth.PostRegisterHandlerFunc(func(params auth.PostRegisterParams) middleware.Responder {
 		err := handlers.NewHandler().Register(context.Background(), params.Body)
 		if err != nil {
 			var errorMessage = new(string)
@@ -147,7 +148,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 	})
 
 	// LOGIN
-	api.UserPostLoginHandler = user.PostLoginHandlerFunc(func(params user.PostLoginParams) middleware.Responder {
+	api.AuthPostLoginHandler = auth.PostLoginHandlerFunc(func(params auth.PostLoginParams) middleware.Responder {
 		result, err := handlers.NewHandler().Login(context.Background(), params.Body)
 		if err != nil {
 			var errorMessage = new(string)
@@ -162,7 +163,7 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 	})
 
 	// LOGOUT
-	api.UserPostLogoutHandler = user.PostLogoutHandlerFunc(func(params user.PostLogoutParams) middleware.Responder {
+	api.AuthPostLogoutHandler = auth.PostLogoutHandlerFunc(func(params auth.PostLogoutParams) middleware.Responder {
 		err := handlers.NewHandler().Logout(context.Background(), &params)
 		if err != nil {
 			var errorMessage = new(string)

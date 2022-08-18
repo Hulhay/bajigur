@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"hulhay-mall/internal/apis/operations/user"
+	"hulhay-mall/internal/apis/operations/auth"
 	"hulhay-mall/internal/models"
 	"hulhay-mall/internal/shared"
 
@@ -104,7 +104,7 @@ func (u *useCase) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	return res, nil
 }
 
-func (u *useCase) Logout(ctx context.Context, params *user.PostLogoutParams) error {
+func (u *useCase) Logout(ctx context.Context, params *auth.PostLogoutParams) error {
 
 	var (
 		err  error

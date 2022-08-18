@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"hulhay-mall/internal/apis/operations/auth"
 	"hulhay-mall/internal/apis/operations/user"
 	"hulhay-mall/internal/models"
 
@@ -23,7 +24,7 @@ type Repositories interface {
 	// Auth Repository
 	Register(ctx context.Context, params *models.RegisterRequest) error
 	Login(ctx context.Context, params *models.LoginRequest) error
-	Logout(ctx context.Context, params *user.PostLogoutParams) error
+	Logout(ctx context.Context, params *auth.PostLogoutParams) error
 
 	// User Repository
 	GetByEmail(ctx context.Context, email string) (*models.Users, error)

@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	configs "hulhay-mall/config"
+	"hulhay-mall/internal/apis/operations/auth"
 	"hulhay-mall/internal/apis/operations/user"
 	"hulhay-mall/internal/models"
 	"hulhay-mall/internal/usecase"
@@ -25,7 +26,7 @@ type Handlers interface {
 	// Aut Handler
 	Register(ctx context.Context, params *models.RegisterRequest) error
 	Login(ctx context.Context, params *models.LoginRequest) (*models.LoginResponse, error)
-	Logout(ctx context.Context, params *user.PostLogoutParams) error
+	Logout(ctx context.Context, params *auth.PostLogoutParams) error
 
 	// User Handler
 	GetProfile(ctx context.Context, params *user.GetProfileParams) (*models.Users, error)

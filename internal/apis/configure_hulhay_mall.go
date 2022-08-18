@@ -139,10 +139,10 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
-			return user.NewPostRegisterDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+			return auth.NewPostRegisterDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
 		}
 
-		return user.NewPostRegisterCreated().WithPayload(&user.PostRegisterCreatedBody{
+		return auth.NewPostRegisterCreated().WithPayload(&auth.PostRegisterCreatedBody{
 			Message: "Success Register New Account",
 		})
 	})
@@ -153,10 +153,10 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
-			return user.NewPostLoginDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+			return auth.NewPostLoginDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
 		}
 
-		return user.NewPostLoginOK().WithPayload(&user.PostLoginOKBody{
+		return auth.NewPostLoginOK().WithPayload(&auth.PostLoginOKBody{
 			Message: "Login Succcessfully",
 			Data:    result,
 		})
@@ -168,10 +168,10 @@ func configureAPI(api *operations.HulhayMallAPI) http.Handler {
 		if err != nil {
 			var errorMessage = new(string)
 			*errorMessage = err.Error()
-			return user.NewPostLogoutDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
+			return auth.NewPostLogoutDefault(400).WithPayload(&models.Error{Code: "400", Message: *errorMessage})
 		}
 
-		return user.NewPostLogoutOK().WithPayload(&user.PostLogoutOKBody{
+		return auth.NewPostLogoutOK().WithPayload(&auth.PostLogoutOKBody{
 			Message: "Logout Successfully",
 		})
 	})
